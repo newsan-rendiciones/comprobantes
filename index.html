@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+  <title>Comprobantes · Newsan</title>
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#E8232E">
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Comprobantes">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="icon" href="icon-192.png">
+
+  <style>
+    /* fondo BLANCO: si asoma algo por debajo (la barrita del iPhone), se ve blanco y no rojo */
+    html, body { margin:0; height:100%; background:#fff; overflow:hidden; }
+    /* alto SIN tocar: inset:0 = la versión estable que funciona en compu y celular */
+    #app { position:fixed; inset:0; width:100%; height:100%; border:0; display:block; }
+    #splash { position:fixed; inset:0; z-index:2; background:#E8232E;
+      display:flex; align-items:center; justify-content:center; transition:opacity .4s ease; }
+    #splash.off { opacity:0; pointer-events:none; }
+    .sp { width:38px; height:38px; border-radius:50%;
+      border:4px solid rgba(255,255,255,.35); border-top-color:#fff; animation:spin 1s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div id="splash"><div class="sp"></div></div>
+  <iframe id="app" src="https://script.google.com/a/macros/newpga.com.ar/s/AKfycbxRV0aOR0XFK8QknydxVRl4BRgCQQeMGNvwbVlDlTCxSnI94tosGMYb879IK5JtjdjVJQ/exec" allow="camera; clipboard-write" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  <script>
+    var f = document.getElementById('app');
+    var quitar = function () { document.getElementById('splash').classList.add('off'); };
+    f.addEventListener('load', quitar);
+    setTimeout(quitar, 6000);
+    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').catch(function () {}); }
+  </script>
+</body>
+</html>
