@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+  <title>Comprobantes · Newsan</title>
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#E8232E">
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Comprobantes">
+  <link rel="apple-touch-icon" href="../icon-192.png">
+  <link rel="icon" href="../icon-192.png">
+
+  <style>
+    html, body { margin:0; padding:0; height:100%; background:#fff; overflow:hidden; }
+
+    /* Franja ROJA que cubre la muesca de arriba (la zona de la hora/señal).
+       Como el header de la app también es rojo, se funden y no se nota el corte. */
+    #topbar { position:fixed; top:0; left:0; right:0; height:env(safe-area-inset-top,0px);
+              background:#E8232E; z-index:3; }
+    /* Franja BLANCA que cubre la barrita de abajo del iPhone.
+       Como la barra de Pendientes/Cargar/Perfil también es blanca, queda parejo. */
+    #botbar { position:fixed; bottom:0; left:0; right:0; height:env(safe-area-inset-bottom,0px);
+              background:#fff; z-index:3; }
+
+    /* La app vive EXACTAMENTE entre esas dos zonas seguras. */
+    #frame { position:fixed; top:env(safe-area-inset-top,0px); bottom:env(safe-area-inset-bottom,0px);
+             left:0; right:0; }
+    #app { width:100%; height:100%; border:0; display:block; }
+
+    #splash { position:fixed; inset:0; z-index:5; background:#E8232E;
+      display:flex; align-items:center; justify-content:center; transition:opacity .4s ease; }
+    #splash.off { opacity:0; pointer-events:none; }
+    .sp { width:38px; height:38px; border-radius:50%;
+      border:4px solid rgba(255,255,255,.35); border-top-color:#fff; animation:spin 1s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div id="splash"><div class="sp"></div></div>
+  <div id="topbar"></div>
+  <div id="botbar"></div>
+  <div id="frame"><iframe id="app" src="https://script.google.com/a/macros/newpga.com.ar/s/AKfycbxRV0aOR0XFK8QknydxVRl4BRgCQQeMGNvwbVlDlTCxSnI94tosGMYb879IK5JtjdjVJQ/exec?u=fede" allow="camera; clipboard-write" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+  <script>
+    var app = document.getElementById('app');
+    var quitar = function(){ document.getElementById('splash').classList.add('off'); };
+    app.addEventListener('load', quitar);
+    setTimeout(quitar, 6000);
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function (regs) { regs.forEach(function (r) { r.unregister(); }); }).catch(function(){});
+    }
+    if (window.caches && caches.keys) {
+      caches.keys().then(function (keys) { keys.forEach(function (k) { caches.delete(k); }); }).catch(function(){});
+    }
+  </script>
+</body>
+</html>
